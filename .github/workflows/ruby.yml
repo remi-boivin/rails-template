@@ -12,37 +12,45 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
 jobs:
   test:
-
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        ruby-version: ['3.1']
-
+    services:
+      postgres:
+       
+        image: postgres:10
+        # The postgres container requires the postgres user to be setup with a password in order to start it due to security
+        # reasons
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Ruby
-    # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
-    # change this to (see https://github.com/ruby/setup-ruby#versioning):
-    # uses: ruby/setup-ruby@v1
-      uses: ruby/setup-ruby@473e4d8fe5dd94ee328fdfca9f8c9c7afc9dae5e
-      with:
-        ruby-version: ${{ matrix.ruby-version }}
-        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-    - name: Setup PostgreSQL
-      # You may pin to the exact commit or the version.
-      # uses: Harmon758/postgresql-action@0be19fa37850b22cb4c9bbf28a03abbf44abd863
-      uses: Harmon758/postgresql-action@v1.0.0
-      with:
-        # Version of PostgreSQL to use
-        postgresql version: latest
-        # POSTGRES_DB - name for the default database that is created
-        postgresql db: template_test 
-        # POSTGRES_USER - create the specified user with superuser power
-        postgresql user: remi 
-    - name: Run tests
-      run: |
-        bundle
-        rspec spec/
+      - uses: actions/checkout@v2
+      - name: Install Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 3.0
+      - name: Install Bundler
+        run: gem install bundler
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.2.0
+      - name: Setup the Rails application
+        env:
+          RAILS_ENV: test
+        run: |
+          sudo apt-get -yqq install libpq-dev
+          bundle config set --local deployment 'false'
+          bundle install --jobs 4 --retry 3
+          cp config/database.github.yml config/database.yml
+          bundle exec rails db:create
+          bundle exec rails db:migrate
+          yarn --frozen-lockfile
+      - name: Run unit tests
+        run: bundle exec rspec

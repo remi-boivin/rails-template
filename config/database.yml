@@ -29,7 +29,7 @@ development:
   # To create additional roles in postgres see `$ createuser --help`.
   # When left blank, postgres will use the default role. This is
   # the same name as the operating system user running Rails.
-  username: remi
+  #username: template
 
   # The password associated with the postgres role (username).
   #password:
@@ -83,4 +83,4 @@ production:
   <<: *default
   database: template_production
   username: template
-  password: <%= ENV['template_DATABASE_PASSWORD'] %>
+  password: <%= ENV['TEMPLATE_DATABASE_PASSWORD'] %>
