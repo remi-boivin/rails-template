@@ -358,6 +358,7 @@ DEPENDENCIES
   devise (~> 4.7.3)
   faker (~> 2.10.0)
   font-awesome-rails (~> 4.7)
+  i18n
   jbuilder (~> 2.7)
   jquery-rails (~> 4.4.0)
   listen (~> 3.3)
