@@ -34,7 +34,7 @@ Contributions are what make the open source community such an amazing place to b
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-For more informations you can read the [GUIDELINE.md](https://github.com/remi-boivin/rails-template/blob/master/GUIDELINES.md) for information about how to develop in python and read the [CONTRIBUTING.md](https://github.com/remi-boivin/rails-template/blob/master/CONTRIBUTING.md) for more information about how to contribute.
+For more informations you can read the [CONTRIBUTING.md](https://github.com/remi-boivin/rails-template/blob/master/CONTRIBUTING.md) for more information about how to contribute.
 
 ## License
 
