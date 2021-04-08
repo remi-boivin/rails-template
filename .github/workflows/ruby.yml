@@ -9,9 +9,9 @@ name: template CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ development ]
   pull_request:
-    branches: [ master ]
+    branches: [ development ]
 jobs:
   test:
     runs-on: ubuntu-latest
